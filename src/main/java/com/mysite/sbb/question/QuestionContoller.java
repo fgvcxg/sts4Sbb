@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,26 +48,43 @@ public class QuestionContoller {
          //인터페이스 하위의 클래스가 많아지면 충돌이 발생될 수 있다.(Autowired)
    private final QuestionService questionService;
    
-   @GetMapping("/question/list")   //http://localhost:9898/question/list
-   @PostMapping("/question/list")   //form 태그의 method=post action="question/list"
-   //@ResponseBody      //요청을 요청한 브라우저에 출력
-      //생략하면 templates의 뷰를 출력
-   public String list(Model model) {   // Model이라 선언하면 객체 자동생성됨
-      //1. 클라이언트 요청 정보   : http://localhost:9898/question/list
-      
-      //2. 비즈니스 로직을 처리
-      List<Question> questionList =
-            //this.questionrepository.findAll(); <- 컨틀롤러가 직접 접근
-            this.questionService.getList();  // <- 서비스가 접근(메소드호출)
-            
-      //3. 뷰(View) 페이지로 전송
-         //Model : 뷰페이지로 서버의 데이터를 담아서 전송하는 객체 (Session, Application)
-               // Session, Application은 예전방식
-            //위의 findAll해서 가져와 List에 담은 것을 model에 담아 뷰 페이지로 전송
-      model.addAttribute("questionList", questionList);
-      
-      return "question_list";
+//   @GetMapping("/question/list")   //http://localhost:9898/question/list
+//   @PostMapping("/question/list")   //form 태그의 method=post action="question/list"
+//   //@ResponseBody      //요청을 요청한 브라우저에 출력
+//      //생략하면 templates의 뷰를 출력
+//   public String list(Model model) {   // Model이라 선언하면 객체 자동생성됨
+//      //1. 클라이언트 요청 정보   : http://localhost:9898/question/list
+//      
+//      //2. 비즈니스 로직을 처리
+//      List<Question> questionList =
+//            //this.questionrepository.findAll(); <- 컨틀롤러가 직접 접근
+//            this.questionService.getList();  // <- 서비스가 접근(메소드호출)
+//            
+//      //3. 뷰(View) 페이지로 전송
+//         //Model : 뷰페이지로 서버의 데이터를 담아서 전송하는 객체 (Session, Application)
+//               // Session, Application은 예전방식
+//            //위의 findAll해서 가져와 List에 담은 것을 model에 담아 뷰 페이지로 전송
+//      model.addAttribute("questionList", questionList);
+//      
+//      return "question_list";
+//   }
+   
+   
+   //2월 14일 페이징 처리를 위해 수정됨
+   //Http://localhost:9595/question/list/?page=0
+   @GetMapping("question/list")
+   public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page) {
+	   
+	   //비즈니스 로직 처리 : 
+	   Page<Question> paging =
+	   this.questionService.getList(page);
+	   
+	   //model 객체에 결과로 받은 paging 객체를 client 로 전송
+	   model.addAttribute("paging", paging);
+	   
+	   return "question_list";
    }
+   
    
    // 상세페이지를 처리하는 메소드 : /question/detail/1
    @GetMapping("question/detail/{id}")
