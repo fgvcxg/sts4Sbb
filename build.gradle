@@ -1,0 +1,42 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.2'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.mysite'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//devtools : 수정 변경시 자동으로 톰캣을 재실행한다(중지 => 시작) : 자동으로 컴파일
+	//development : 실제 서비스로 빌드할때는 빌드되지 않도록 설정, 개발시에만 필요
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	//lombok 라이브러리 등록
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.projectlombok:lombok'
+	
+	runtimeOnly 'com.h2database:h2'
+	
+	//JPA 의존성 라이브러리 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	
+	//Thymeleaf : view page, 백엔드에서 처리한 데이터를 .html 에 넣어줄수 있도록 하는 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+   	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+   	
+   	//Spring 에서 제공해주는 유효성 검사 라이브러리 : form에서 빈 값이나 글자수 제한
+   	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
