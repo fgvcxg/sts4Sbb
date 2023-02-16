@@ -12,20 +12,26 @@
 </head>
 <body>
 	<!-- 최상단의 네비게이션 바(Nav bar) -->
-	
+
 	<!-- 외부의 navbar.html import -->
 	<nav th:replace="~{navbar::navbarFragment}"></nav>
-	
-	
+
+
 
 
 	<!-- 기본 템플릿에 삽입될 내용 - START -->
 	<TH:BLOCK LAYOUT:FRAGMENT="CONTENT"></TH:BLOCK>
 	<!-- 기본 템플릿에 삽입될 내용 - END -->
-	
+
+	<!-- Bootstrap JS -->
 	<script th:src="@{/bootstrap.min.js}"></script>
 	
-	
+	<!-- 자바스크립트 Start -->
+	<th:block layout:fragment="script"></th:block>
+	<!-- 자바스크립트 End -->
+
+
+
 
 </body>
 </html>
