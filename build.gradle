@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.mysite'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.3-SNAPSHOT'
 sourceCompatibility = '17'
 
 repositories {
@@ -38,6 +38,15 @@ dependencies {
    	//스프링 시큐리티 설치
    	implementation 'org.springframework.boot:spring-boot-starter-security'
  	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+ 	
+ 	//마크다운 설치
+ 	implementation 'org.commonmark:commonmark:0.21.0'
+ 	
+ 	//Oracle 라이브러리-2023-02-23
+ 	implementation 'com.oracle.database.jdbc:ojdbc11'
+ 	
+ 	//JDBC -2023-02-23
+ 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	
 }
 

@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 // <Question, Integer>
 // Question : CRUD할(DAO) 클래스(entity) 이름 , Integer : Question클래스의 pk 컬럼의 데이터 타입
@@ -28,7 +31,9 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 //subject 기준으로 검색시 정의   
 	Question findBySubject(String subject); // <= 검색 결과가 1개일때 처리
 	// select * from question where subject = ?(String subject)
-	//content 기준으로 검색시 정의
+	// content 기준으로 검색시 정의
+
+	Question findBySubjectAndContent(String subject, String content);
 
 	Question findByContent(String content); // <= 검색 결과가 1개일때 처리
 	// select * from question where content = ?(String content)
@@ -37,7 +42,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 	List<Question> findBySubjectLike(String subject); // 대소문자주의
 	// select * from question where subject like '%sbb%'
 
-	//content 컬럼을 조건으로 검색
+	// content 컬럼을 조건으로 검색
 	List<Question> findByContentLike(String content);
 	// select * from question where content like '%내용%'
 
@@ -63,8 +68,16 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
 	// Delete : delete()
 
-	//페이징 처리하기 위한 메서드 생성
-	//select * from question : Pageable 변수에 : page, 레코드 수를 넣어주면(10)
+	// 페이징 처리하기 위한 메서드 생성
+	// select * from question : Pageable 변수에 : page, 레코드 수를 넣어주면(10)
 	Page<Question> findAll(Pageable pageable);
+
+	Page<Question> findAll(Specification<Question> spec, Pageable pageable);
+
+	@Query("select " + "distinct q " + "from Question q " + "left outer join SiteUser u1 on q.author=u1 "
+			+ "left outer join Answer a on a.question=q " + "left outer join SiteUser u2 on a.author=u2 " + "where "
+			+ " q.subject like %:kw% " + " or q.content like %:kw% " + " or u1.username like %:kw% "
+			+ " or a.content like %:kw% " + " or u2.username like %:kw% ")
+	Page<Question> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
 
 }

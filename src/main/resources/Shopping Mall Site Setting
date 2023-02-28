@@ -1,0 +1,14 @@
+Shopping Mall Site Setting
+
+	Spring Boot : 2.7
+	Java Version : JDK 11
+	Packaging : JAR
+	package : com.shop
+	name : shop
+	group : com.shop
+	Artifact : shop
+	
+	lib : lombok
+		  dev Tools
+		  Spring Wed
+		  
